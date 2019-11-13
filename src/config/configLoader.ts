@@ -12,6 +12,7 @@ export interface Config {
         baseURL: string,
         projectKeys: [string]
     }
+    template: string
 }
 
 export function loadConfig(config: string) {
