@@ -2,7 +2,6 @@ import fs from 'fs';
 
 export interface Config {
     github: {
-        githubAccessString: string,
         userName: string,
         userSecret: string,
         repoHost: string

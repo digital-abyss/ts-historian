@@ -113,3 +113,7 @@ public/
 # End of https://www.gitignore.io/api/git,node
 
 dist/
+
+
+# Configuration file
+ts-historian.json
