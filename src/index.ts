@@ -24,8 +24,6 @@ commander
 
         let loadedConfig: Config = loadConfig(cmdObj.config);
 
-        console.log(loadedConfig)
-
         let githubAPI = new GithubAPI(  loadedConfig.github.repoHost,
                                         cmdObj.owner, cmdObj.repo,
                                         loadedConfig.github.userName,
