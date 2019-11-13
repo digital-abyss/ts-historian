@@ -33,6 +33,7 @@ export class GithubAPI {
         //console.log(response.result);
 
         if (response.statusCode != 200 || !response.result) {
+            console.log(response);
             throw new Error();
         }
         return Promise.resolve(response.result.commits);

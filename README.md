@@ -9,7 +9,6 @@
  ```json
 {
     "github": {
-
         "userName": "github-user",
         "userSecret": "github-token",
         "repoHost": "https://api.github.com"
@@ -20,6 +19,5 @@
  ## Examples:
  
  ```bash
-npm run ts-node -- prs -b 1.4.0 -d master -r typed-rest-client -c ./nhistorian.json -o microsof
+npm run ts-node -- prs -b 1.4.0 -d master -r typed-rest-client -c ./ts-historian.json -o microsoft
  ```
- 

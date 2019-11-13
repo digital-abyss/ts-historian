@@ -19,18 +19,15 @@ commander
     .option('-o, --owner <owner>', 'repository owner name')
     .description('List pull requests between two tags/shas/branches')
     .action( async (cmdObj) => {
-        console.log(process.argv);
+        //console.log(process.argv);
         console.log(chalk.yellow('~~~~~~~Historian: a tool for sumarizing changes~~~~~~~'))
-
-        console.log(cmdObj.config);
-        console.log(cmdObj.repo);
 
         let loadedConfig: Config = loadConfig(cmdObj.config);
 
         console.log(loadedConfig)
 
         let githubAPI = new GithubAPI(  loadedConfig.github.repoHost,
-                                        cmdObj.repoOwner, cmdObj.repo,
+                                        cmdObj.owner, cmdObj.repo,
                                         loadedConfig.github.userName,
                                         loadedConfig.github.userSecret
                                     );
