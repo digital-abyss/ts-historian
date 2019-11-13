@@ -117,3 +117,8 @@ dist/
 
 # Configuration file
 ts-historian.json
+
+# Vim
+*.swp
+*.swo
+*.swn
