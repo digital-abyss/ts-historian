@@ -1,0 +1,43 @@
+{
+    "name": "nhistorian",
+    "version": "1.0.0",
+    "description": "A tool for creating release notes",
+    "main": "index.js",
+    "dependencies": {
+        "chalk": "^2.4.2",
+        "commander": "^4.0.0",
+        "nodegit": "0.24.3",
+        "typed-rest-client": "^1.5.0"
+    },
+    "devDependencies": {
+        "@types/jest": "24.0.15",
+        "@types/nodegit": "0.24.8",
+        "jest": "24.8.0",
+        "ts-jest": "24.0.2",
+        "ts-node": "^8.4.1",
+        "typescript": "3.5.3"
+    },
+    "scripts": {
+        "build": "tsc",
+        "test": "jest",
+        "test-coverage": "jest --coverage",
+        "ts-node": "ts-node src/index.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/digital-abyss/nhistorian.git"
+    },
+    "keywords": [
+        "releases",
+        "notes",
+        "git",
+        "github",
+        "jira"
+    ],
+    "author": "digitala",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/digital-abyss/nhistorian/issues"
+    },
+    "homepage": "https://github.com/digital-abyss/nhistorian#readme"
+}
