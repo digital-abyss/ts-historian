@@ -3,6 +3,8 @@ import commander from 'commander';
 import chalk from 'chalk';
 import {GithubAPI} from './github/githubAPI'
 import {loadConfig, Config} from './config/configLoader'
+import Handlebars from "handlebars"
+import fs from "fs"
 
 //Sample command: npm run ts-node -- prs -b 1.4.0 -d master -r typed-rest-client -c ./nhistorian.json -o microsoft
 
@@ -33,10 +35,19 @@ commander
                                         loadedConfig.github.userSecret
                                     );
 
+	let source = fs.readFileSync(loadedConfig.template, {"encoding": "utf-8", "flag": "r"});
+	let template = Handlebars.compile(source)
+	
         let commits = await githubAPI.getCommitsBetweenTwoTags(cmdObj.base, cmdObj.delta);
+	let prs = githubAPI.GetPullRequestsFromCommits(commits);
 
-        console.log('PRs:');
-        console.log(githubAPI.GetPullRequestsFromCommits(commits));
+        for (let pr of prs) {
+	    console.log(template(pr))
+        }
+
+
+	//console.log('PRs:');
+	console.log(githubAPI.GetPullRequestsFromCommits(commits));
     });
 
 
