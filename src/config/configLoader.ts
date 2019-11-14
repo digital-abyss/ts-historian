@@ -4,7 +4,13 @@ export interface Config {
     github: {
         userName: string,
         userSecret: string,
-        repoHost: string
+        baseURL: string
+    },
+    jira: {
+        userName: string,
+        userSecret: string,
+        baseURL: string,
+        projectKeys: [string]
     }
 }
 

@@ -8,19 +8,17 @@ export function sum(a: number, b:number) {
 
 
 export class GithubAPI {
-    baseUrl: string;
+    baseURL: string;
     owner: string;
     repository: string;
     restClient: rm.RestClient;
 
-    public constructor(baseUrl: string, owner: string, repository: string, userName: string, userSecret: string) {
-
-        this.baseUrl = baseUrl;
+    public constructor(baseURL: string, owner: string, repository: string, userName: string, userSecret: string) {
+        this.baseURL = baseURL;
         this.owner = owner;
         this.repository = repository;
-
         const basicHandler: hm.BasicCredentialHandler = new hm.BasicCredentialHandler(userName, userSecret);
-        this.restClient = new rm.RestClient('no-agent', this.baseUrl, [basicHandler]);
+        this.restClient = new rm.RestClient('no-agent', this.baseURL, [basicHandler]);
     }
 
     public async getCommitsBetweenTwoTags(baseTag: string, deltaTag: string): Promise<[GithubCommit]> {  

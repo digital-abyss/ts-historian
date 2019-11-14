@@ -8,14 +8,13 @@ var githubAPICommits : [GithubCommit];
 
 beforeAll(async () => {
 
-    let config: Config = loadConfig('./nhistorian.json');
+    let config: Config = loadConfig('./ts-historian.json');
 
-
-    myGithub = new GithubAPI(   'https://api.github.com', 
-                                'microsoft',
-                                'typed-rest-client',
-                                config.github.userName,
-                                config.github.userSecret
+    myGithub = new GithubAPI( config.github.baseURL,
+                            'microsoft',
+                            'typed-rest-client',
+                            config.github.userName,
+                            config.github.userSecret
                             );
 
     githubAPICommits = await myGithub.getCommitsBetweenTwoTags('1.4.0', 'master');

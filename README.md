@@ -11,7 +11,12 @@
     "github": {
         "userName": "github-user",
         "userSecret": "github-token",
-        "repoHost": "https://api.github.com"
+        "baseURL": "https://api.github.com"
+    },
+    "jira": {
+          "userName": "jira-user",
+        "userSecret": "jira-password",
+        "baseURL": "https://localhost:8080"
     }
 }
  ```
