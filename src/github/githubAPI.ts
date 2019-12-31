@@ -8,7 +8,7 @@ export function sum(a: number, b:number) {
 
 
 export class GithubAPI {
-    baseURL: string;
+   baseURL: string;
     owner: string;
     repository: string;
     restClient: rm.RestClient;
@@ -24,7 +24,6 @@ export class GithubAPI {
     public async getCommitsBetweenTwoTags(baseTag: string, deltaTag: string): Promise<[GithubCommit]> {  
         //'/api/v3/repos/'
         let path = 'repos/' + this.owner + '/' + this.repository + '/compare/' + baseTag + '...' + deltaTag;
-        console.log(path);
 
         let response : rm.IRestResponse<GithubCommitsResponse> = await this.restClient.get<GithubCommitsResponse>(path);
 
@@ -58,8 +57,58 @@ export class GithubAPI {
         }
         return pullRequests;
     }
-}
+    public async createPullRequest(title: string, pullRequestBody: string, headBranch: string, baseBranch: string) : Promise<GithubPullRequestOpenResponse> {
+        let path = 'repos/' + this.owner + '/' + this.repository + '/pulls';
 
+        let requestBody = {
+            title: title,
+            head: headBranch,
+            base: baseBranch,
+            body: pullRequestBody,
+            maintainer_can_modify: true,
+            draft: false
+        };
+
+        let response: rm.IRestResponse<GithubPullRequestOpenResponse> = await this.restClient.create(path, requestBody);
+        if (response.statusCode != 201 || !response.result) {
+            console.log(response);
+            throw new Error();
+        }
+        return Promise.resolve(response.result);
+ 
+    }
+    
+    public async getShaForBranch(branchName: string): Promise<string> {
+        let path = 'repos/' + this.owner + '/' + this.repository + '/git/refs/heads/' + branchName;
+
+        let response: rm.IRestResponse<GithubRefsResponse> = await this.restClient.get(path); 
+         if (response.statusCode != 200 || !response.result) {
+            console.log(response);
+            throw new Error();
+        }
+        return Promise.resolve(response.result.object.sha);
+    }
+    
+    public async createBranchFromSha(branchName: string, sha: string): Promise<{}> {
+        let path = 'repos/' + this.owner + '/' + this.repository + '/git/refs';
+
+        let body = {
+            ref: 'refs/heads/' + branchName,
+            sha: sha
+        };
+
+        let response: rm.IRestResponse<{}> = await this.restClient.create(path, body); 
+        if (response.statusCode != 201 || !response.result) {
+            console.log("ERROR ERROR!");
+            console.log("statusCode = " + response.statusCode);
+            console.log(response);
+            throw new Error();
+        }
+        console.log("I AM HERE!");
+        return Promise.resolve(response.result);
+    }
+}
+ 
 export interface GithubPullRequest {
     prNumber: number,
     commit: GithubCommit
@@ -95,4 +144,17 @@ export interface GithubCommit {
 export interface GithubCommitsResponse {
     url: string,
     commits: [GithubCommit]
+}
+
+export interface GithubPullRequestOpenResponse {
+    url: string,
+    html_url: string,
+    number: Number,
+    state: string
+}
+
+export interface GithubRefsResponse {
+    object: {
+        sha: string
+    }
 }
