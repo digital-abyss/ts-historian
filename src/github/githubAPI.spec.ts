@@ -44,29 +44,31 @@ test('Unit Test: Passing in Empty List of Commits returns an Empty List of Pull 
     expect(pullRequests).toHaveLength(0);
 });
 
-test('Integration Test: Create a pull request using github\'s API', async () => {
+
+
+test('Integration Test: Create a new branch from a sha, open a PR, close it, then delete the branch.', async () => {
+
+    let response = await myGithub.createBranchFromSha('ian-test-branch-3', 'ee8b81eeddf058ca3676fbc046900dd40a28f700');
+    console.log(response);
+    expect(response).toBe('refs/heads/ian-test-branch-3');
+    
+    response = await myGithub.getShaForBranch('ian-test-branch-3');
+    console.log(response);
+    expect(response).toBe('ee8b81eeddf058ca3676fbc046900dd40a28f700');
 
     let requestBody = `| PR number | JIRA ticket | author | PO approver |
 |----------|----------|----------|----------|
 | #12      | [TEST1-1](http://localhost:8089/stories/test1-1) | @digital-abyss | some po|    
     `
 
-//    let response = await myGithub.createPullRequest('sample title', requestBody, 'ian-test-branch', 'master');
+    let createResponse = await myGithub.createPullRequest('sample title', requestBody, 'ian-test-branch-3', 'master');
     
-//    expect(response.state).toBe('open');
-    
- });
+    expect(createResponse.state).toBe('open');
 
-test('Integration Test: Get a branch\'s SHA using github\'s API', async () => {
+    createResponse = await myGithub.closePullRequest(createResponse.number);
 
-    let response = await myGithub.getShaForBranch('ian-test-branch');
+    expect(createResponse.state).toBe('closed');
 
-    expect(response).toBe('ee8b81eeddf058ca3676fbc046900dd40a28f700');
 
+    await myGithub.deleteBranch('ian-test-branch-3');
 });
-
-test('Integration Test: Create a new branch from a sha', async () => {
-
-    let response = await myGithub.createBranchFromSha('ian-test-branch-3', 'ee8b81eeddf058ca3676fbc046900dd40a28f700');
-    console.log(response);
-})

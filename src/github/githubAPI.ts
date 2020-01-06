@@ -78,6 +78,22 @@ export class GithubAPI {
  
     }
     
+    public async closePullRequest(pullRequest: Number) : Promise<GithubPullRequestOpenResponse> {
+        let path = 'repos/' + this.owner + '/' + this.repository + '/pulls/' + pullRequest.toString();
+
+        let requestBody = {
+            state: 'closed'
+        };
+
+        let response: rm.IRestResponse<GithubPullRequestOpenResponse> = await this.restClient.update(path, requestBody);
+        if (response.statusCode != 200 || !response.result) {
+            console.log(response);
+            throw new Error();
+        }
+        return Promise.resolve(response.result);
+ 
+    }
+
     public async getShaForBranch(branchName: string): Promise<string> {
         let path = 'repos/' + this.owner + '/' + this.repository + '/git/refs/heads/' + branchName;
 
@@ -89,7 +105,7 @@ export class GithubAPI {
         return Promise.resolve(response.result.object.sha);
     }
     
-    public async createBranchFromSha(branchName: string, sha: string): Promise<{}> {
+    public async createBranchFromSha(branchName: string, sha: string): Promise<string> {
         let path = 'repos/' + this.owner + '/' + this.repository + '/git/refs';
 
         let body = {
@@ -97,16 +113,27 @@ export class GithubAPI {
             sha: sha
         };
 
-        let response: rm.IRestResponse<{}> = await this.restClient.create(path, body); 
+        let response: rm.IRestResponse<any> = await this.restClient.create(path, body); 
         if (response.statusCode != 201 || !response.result) {
             console.log("ERROR ERROR!");
             console.log("statusCode = " + response.statusCode);
             console.log(response);
             throw new Error();
         }
-        console.log("I AM HERE!");
-        return Promise.resolve(response.result);
+        return Promise.resolve(response.result.ref);
     }
+
+    public async deleteBranch(branchName: string) {
+        let path = 'repos/' + this.owner + '/' + this.repository + '/git/refs/heads/' + branchName;
+
+
+        let response: rm.IRestResponse<{}> = await this.restClient.del(path); 
+        if (response.statusCode != 204 ) {
+            console.log("statusCode = " + response.statusCode);
+            console.log(response);
+            throw new Error();
+        }
+     }
 }
  
 export interface GithubPullRequest {
